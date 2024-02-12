@@ -3,23 +3,24 @@
 <?php require('../../function.php'); ?>
 
 <?php
+
 if (isset($_POST['simpan'])) {
 
     if ($_POST['ProdukID'] != "") {
         $result = $db->updateProduk($_POST['ProdukID'], $_POST['NamaProduk'], $_POST['Harga'], $_POST['Stok']);
 
         if ($result == 1) {
-            $db->redirect("?pesan=berhasil_ubah");
+            $db->redirect("?produk&pesan=berhasil_ubah");
         } else {
-            $db->redirect("?pesan=gagal_ubah");
+            $db->redirect("?produk&pesan=gagal_ubah");
         }
     } else {
         $result = $db->simpanProduk($_POST['NamaProduk'], $_POST['Harga'], $_POST['Stok']);
 
         if ($result == 1) {
-            $db->redirect("?pesan=berhasil");
+            $db->redirect("?produk&pesan=berhasil");
         } else {
-            $db->redirect("?pesan=gagal");
+            $db->redirect("?produk&pesan=gagal");
         }
     }
 }
@@ -27,17 +28,17 @@ if (isset($_POST['simpan'])) {
 if (isset($_POST['hapus'])) {
     $result = $db->hapusProduk($_POST['ProdukID']);
     if ($result == 1) {
-        $db->redirect("?pesan_table=berhasil_hapus");
+        $db->redirect("?produk&pesan_table=berhasil_hapus");
     } else if ($result == "ERROR:BERKAITAN") {
-        $db->redirect("?pesan_table=berkaitan");
+        $db->redirect("?produk&pesan_table=berkaitan");
     } else {
-        $db->redirect("?pesan_table=gagal_hapus");
+        $db->redirect("?produk&pesan_table=gagal_hapus");
     }
 }
 
 if (isset($_POST['submitSearch'])) {
     if ($_POST['search'] != "") {
-        $db->redirect("?search=" . $_POST['search']);
+        $db->redirect("?produk&search=" . $_POST['search']);
     } else {
         $db->redirect("?");
     }
@@ -177,7 +178,7 @@ if (isset($_POST['submitSearch'])) {
                                                 <td><?= $value['Stok'] ?></td>
                                                 <td>
                                                     <div class="d-flex gap-1">
-                                                        <a href="?edit&id=<?= $value['ProdukID'] ?>" class="btn btn-sm btn-warning">Edit</a>
+                                                        <a href="?produk&edit&id=<?= $value['ProdukID'] ?>" class="btn btn-sm btn-warning">Edit</a>
                                                         <form action="" method="post">
                                                             <input type="hidden" name="ProdukID" value="<?= $value['ProdukID'] ?>">
                                                             <button type="submit" name="hapus" class="btn btn-sm btn-danger">Hapus</button>
@@ -200,7 +201,7 @@ if (isset($_POST['submitSearch'])) {
                                                     <td><?= $value['Stok'] ?></td>
                                                     <td>
                                                         <div class="d-flex gap-1">
-                                                            <a href="?edit&id=<?= $value['ProdukID'] ?>" class="btn btn-sm btn-warning">Edit</a>
+                                                            <a href="?produk&edit&id=<?= $value['ProdukID'] ?>" class="btn btn-sm btn-warning">Edit</a>
                                                             <form action="" method="post" onsubmit="return confirm('Anda yakin ingin menghapus data ini?')">
                                                                 <input type="hidden" name="ProdukID" value="<?= $value['ProdukID'] ?>">
                                                                 <button type="submit" name="hapus" class="btn btn-sm btn-danger">Hapus</button>

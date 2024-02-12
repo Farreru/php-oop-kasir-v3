@@ -63,6 +63,11 @@ class Koneksi
         echo "<script> window.location.href = '$string' </script>";
     }
 
+    public function checkDir()
+    {
+        return __DIR__;
+    }
+
     public function checkSession()
     {
         if (isset($_SESSION['user'])) {

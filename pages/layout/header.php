@@ -24,11 +24,10 @@ session_start();
 
                 <div class="collapse navbar-collapse" id="isiNavbar">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <?php require('navbar.php'); ?>
-                        </li>
+                        <?php require('navbar.php'); ?>
+
                     </ul>
-                    <a href="../../logout.php" class="btn btn-danger btn-sm">Logout</a>
+                    <a href="../../logout.php" class="btn btn-danger">Logout</a>
                 </div>
             </div>
         </nav>

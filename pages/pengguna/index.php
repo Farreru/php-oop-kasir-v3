@@ -13,21 +13,21 @@ if (isset($_POST['simpan'])) {
         }
 
         if ($result == 1) {
-            $db->redirect("?pesan=berhasil_ubah");
+            $db->redirect("?pengguna&pesan=berhasil_ubah");
         } else if ($result === "ERROR:UNIQUE_USERNAME_EMAIL") {
-            $db->redirect("?pesan=telah-diambil");
+            $db->redirect("?pengguna&pesan=telah-diambil");
         } else {
-            $db->redirect("?pesan=gagal_ubah");
+            $db->redirect("?pengguna&pesan=gagal_ubah");
         }
     } else {
         $result = $db->simpanPengguna($_POST['NamaLengkap'], $_POST['Username'], $_POST['Email'], $_POST['Password'], $_POST['Alamat'], $_POST['Level']);
 
         if ($result == 1) {
-            $db->redirect("?pesan=berhasil");
+            $db->redirect("?pengguna&pesan=berhasil");
         } else if ($result === "ERROR:UNIQUE_USERNAME_EMAIL") {
-            $db->redirect("?pesan=telah-diambil");
+            $db->redirect("?pengguna&pesan=telah-diambil");
         } else {
-            $db->redirect("?pesan=gagal");
+            $db->redirect("?pengguna&pesan=gagal");
         }
     }
 }
@@ -35,15 +35,15 @@ if (isset($_POST['simpan'])) {
 if (isset($_POST['hapus'])) {
     $result = $db->hapusPengguna($_POST['PenggunaID']);
     if ($result) {
-        $db->redirect("?pesan_table=berhasil_hapus");
+        $db->redirect("?pengguna&pesan_table=berhasil_hapus");
     } else {
-        $db->redirect("?pesan_table=gagal_hapus");
+        $db->redirect("?pengguna&pesan_table=gagal_hapus");
     }
 }
 
 if (isset($_POST['submitSearch'])) {
     if ($_POST['search'] != "") {
-        $db->redirect("?search=" . $_POST['search']);
+        $db->redirect("?pengguna&search=" . $_POST['search']);
     } else {
         $db->redirect("?");
     }
@@ -219,7 +219,7 @@ if (isset($_POST['submitSearch'])) {
                                                 <td><?= ($value['Level'] == "1" ? "Admin" : ($value['Level'] == "2" ? "Petugas" : "")) ?></td>
                                                 <td>
                                                     <div class="d-flex gap-1">
-                                                        <a href="?edit&id=<?= $value['PenggunaID'] ?>" class="btn btn-sm btn-warning">Edit</a>
+                                                        <a href="?pengguna&edit&id=<?= $value['PenggunaID'] ?>" class="btn btn-sm btn-warning">Edit</a>
                                                         <form action="" method="post">
                                                             <input type="hidden" name="PenggunaID" value="<?= $value['PenggunaID'] ?>">
                                                             <button type="submit" name="hapus" class="btn btn-sm btn-danger">Hapus</button>
@@ -244,7 +244,7 @@ if (isset($_POST['submitSearch'])) {
                                                     <td><?= ($value['Level'] == "1" ? "Admin" : ($value['Level'] == "2" ? "Petugas" : "")) ?></td>
                                                     <td>
                                                         <div class="d-flex gap-1">
-                                                            <a href="?edit&id=<?= $value['PenggunaID'] ?>" class="btn btn-sm btn-warning">Edit</a>
+                                                            <a href="?pengguna&edit&id=<?= $value['PenggunaID'] ?>" class="btn btn-sm btn-warning">Edit</a>
                                                             <form action="" method="post">
                                                                 <input type="hidden" name="PenggunaID" value="<?= $value['PenggunaID'] ?>">
                                                                 <button type="submit" name="hapus" class="btn btn-sm btn-danger">Hapus</button>
