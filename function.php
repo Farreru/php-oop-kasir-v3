@@ -14,7 +14,7 @@ class Koneksi
         }
     }
 
-    public function query($sql, $data = [], $fetch = false)
+    public function query($sql, $data = [], $fetch = false, $id = false)
     {
         $q = $this->conn->prepare($sql);
 
@@ -22,6 +22,10 @@ class Koneksi
             $q->execute($data);
         } else {
             $q->execute();
+        }
+
+        if ($id) {
+            return $this->conn->lastInsertId();
         }
 
 
@@ -222,6 +226,157 @@ class Koneksi
     public function hapusProduk($id)
     {
         $sql = "DELETE FROM produk WHERE ProdukID LIKE ?";
+
+        try {
+            $result = $this->query($sql, [$id]);
+        } catch (PDOException $e) {
+            if ($e->getCode() == 23000) {
+                return "ERROR:BERKAITAN";
+            }
+        }
+
+        return $result ? true : false;
+    }
+
+    public function dataPelanggan()
+    {
+        $sql = "SELECT * FROM pelanggan ORDER BY NamaPelanggan ASC";
+
+        $result = $this->query($sql, [], true);
+
+        return $result;
+    }
+
+    public function searchPelanggan($keyword)
+    {
+        $sql = "SELECT * FROM pelanggan";
+
+        if (!empty($keyword)) {
+            $sql .= " WHERE NamaPelanggan LIKE ?";
+            $keyword = "%$keyword%";
+        }
+
+        $result = $this->query($sql, [$keyword], true);
+
+        return $result;
+    }
+
+    public function showPelanggan($id)
+    {
+        $sql = "SELECT * FROM pelanggan WHERE PelangganID LIKE ?";
+
+        $result = $this->query($sql, [$id], true);
+
+        return $result;
+    }
+
+    public function simpanPelanggan($nama, $alamat, $no_telp)
+    {
+        $sql = "INSERT INTO pelanggan (NamaPelanggan, Alamat, NomorTelepon) VALUE(?,?,?)";
+
+        $result = $this->query($sql, [$nama, $alamat, $no_telp]);
+
+        return $result ? true : false;
+    }
+
+    public function updatePelanggan($id, $nama, $alamat, $no_telp)
+    {
+        $sql = "UPDATE pelanggan SET NamaPelanggan = ? , Alamat = ?, NomorTelepon = ? WHERE PelangganID = ?";
+
+        $result = $this->query($sql, [$nama, $alamat, $no_telp, $id]);
+
+        return $result ? true : false;
+    }
+
+    public function hapusPelanggan($id)
+    {
+        $sql = "DELETE FROM pelanggan WHERE PelangganID LIKE ?";
+
+        try {
+            $result = $this->query($sql, [$id]);
+        } catch (PDOException $e) {
+            if ($e->getCode() == 23000) {
+                return "ERROR:BERKAITAN";
+            }
+        }
+
+        return $result ? true : false;
+    }
+
+    public function dataPenjualan()
+    {
+        $sql = "SELECT penjualan.*, pelanggan.NamaPelanggan FROM penjualan JOIN pelanggan ON pelanggan.PelangganID = penjualan.PelangganID ORDER BY TanggalPenjualan DESC";
+
+        $result = $this->query($sql, [], true);
+
+        return $result;
+    }
+
+    public function searchPenjualan($keyword)
+    {
+        $sql = "SELECT penjualan.*, pelanggan.NamaPelanggan FROM penjualan JOIN pelanggan ON pelanggan.PelangganID = penjualan.PelangganID ORDER BY TanggalPenjualan DESC";
+
+        if (!empty($keyword)) {
+            $sql .= " WHERE NamaPelanggan LIKE ?";
+            $keyword = "%$keyword%";
+        }
+
+        $result = $this->query($sql, [$keyword], true);
+
+        return $result;
+    }
+
+    public function showPenjualan($id)
+    {
+        $sql = "SELECT penjualan.*, pelanggan.NamaPelanggan FROM penjualan JOIN pelanggan ON pelanggan.PelangganID = penjualan.PelangganID WHERE PelangganID LIKE ?";
+
+        $result = $this->query($sql, [$id], true);
+
+        return $result;
+    }
+
+    public function simpanPenjualanMember($pelanggan_id, $tanggal_penjualan)
+    {
+        $sql = "INSERT INTO penjualan (PelangganID, TanggalPenjualan) VALUE(?,?)";
+
+        $result = $this->query($sql, [$pelanggan_id, $tanggal_penjualan], false, true);
+
+        if ($result) {
+            return ['pesan' => 'berhasil', 'PenjualanID' => $result];
+        }
+
+        return false;
+    }
+
+    public function simpanPenjualanNonMember($nama_pelanggan, $alamat, $nomor_telepon, $tanggal_penjualan)
+    {
+        $pelanggan = $this->query("INSERT INTO pelanggan (NamaPelanggan, Alamat, NomorTelepon) VALUES(?, ?, ?)", [$nama_pelanggan, $alamat, $nomor_telepon], false, true);
+
+        if ($pelanggan) {
+            $sql = "INSERT INTO penjualan (PelangganID, TanggalPenjualan) VALUE(?,?)";
+
+            $result = $this->query($sql, [$pelanggan, $tanggal_penjualan], false, true);
+
+            if ($result) {
+                return ['pesan' => 'berhasil', 'PenjualanID' => $result];
+            }
+        }
+
+        return false;
+    }
+
+    public function updatePenjualan($id, $nama, $alamat, $no_telp)
+    {
+        $sql = "UPDATE pelanggan SET NamaPelanggan = ? , Alamat = ?, NomorTelepon = ? WHERE PelangganID = ?";
+
+        $result = $this->query($sql, [$nama, $alamat, $no_telp, $id]);
+
+        return $result ? true : false;
+    }
+
+    public function hapusPenjualan($id)
+    {
+        $sql = "DELETE FROM penjualan WHERE PenjualanID LIKE ?";
 
         try {
             $result = $this->query($sql, [$id]);

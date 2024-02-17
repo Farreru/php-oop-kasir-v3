@@ -1,6 +1,5 @@
 <?php $title = "Beranda"; ?>
 <?php require('../layout/header.php'); ?>
-<?php require('../../function.php'); ?>
 
 <?php
 

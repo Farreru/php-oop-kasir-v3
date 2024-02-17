@@ -3,6 +3,10 @@
 
 <?php
 session_start();
+require('../../function.php');
+if (!isset($_SESSION['user'])) {
+    $db->redirect("../../login.php");
+}
 ?>
 
 <head>
